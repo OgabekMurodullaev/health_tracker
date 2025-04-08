@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -139,3 +140,32 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Mental Health Admin",
+    "site_header": "Mental Health Tracker",
+    "site_brand": "MHT Admin",
+    "site_logo": "images/favicon.ico",  # favicon.ico’ni static papkaga qo‘ying
+    "welcome_sign": "Xush kelibsiz, Admin!",
+    "copyright": "Mental Health Tracker 2025",
+    "search_model": ["auth.User", "your_app.MoodEntry"],
+    "topmenu_links": [
+        {"name": "Bosh sahifa", "url": "home", "new_window": False},
+    ],
+    "usermenu_links": [
+        {"name": "Profile", "url": "/profile/", "new_window": False},
+    ],
+    "show_ui_builder": True,  # UI’ni moslashtirish uchun
+    "changeform_format": "collapsible",  # Forma ko‘rinishi
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_colour": "navbar-dark",
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
+    "sidebar": "sidebar-dark-primary",
+    "theme": "flatly",  # Bootstrap flatly temasi
+}
