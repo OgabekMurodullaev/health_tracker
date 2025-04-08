@@ -161,6 +161,19 @@
             background-color: #2563eb;
             transform: translateY(-2px);
         }
+
+        .user-count span {
+              transition: transform 0.3s ease;
+        }
+
+        .user-count span:hover {
+             transform: scale(1.1);
+        }
+
+        .user-count .badge {
+            background-color: #3b82f6;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -233,6 +246,11 @@
 <!-- Footer -->
 <footer>
     <p>© 2025 Mental Health Tracker. Barcha huquqlar himoyalangan.</p>
+    <div class="user-count mt-2">
+        <span class="badge bg-light text-dark rounded-pill p-2" style="font-size: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+            <i class="fas fa-users me-2"></i> Foydalanuvchilar: <strong>{{ total_users }}</strong>
+        </span>
+    </div>
     <div class="social-icons mt-2">
         <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
         <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>

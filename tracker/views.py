@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 import json
 import datetime
@@ -8,8 +9,9 @@ from tracker.forms import MoodEntryForm
 from tracker.models import MoodEntry
 
 
-def home_page(request):
-    return render(request, 'home.html')
+def home(request):
+    total_users = User.objects.count()
+    return render(request, 'home.html', {'total_users': total_users})
 
 
 @login_required
