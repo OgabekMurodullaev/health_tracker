@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <h3>Sizning profilingiz</h3>
+            </div>
+            <div class="card-body text-center">
+                <!-- Avatar -->
+                <img src="{{ profile.avatar.url }}" alt="Avatar" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                
+                <!-- Username -->
+                <h4 class="card-title">{{ profile.user.username }}</h4>
+                
+                <!-- Bio -->
+                <p class="card-text text-muted">
+                    {% if profile.bio %}
+                        {{ profile.bio }}
+                    {% else %}
+                        Bio hali kiritilmagan.
+                    {% endif %}
+                </p>
+                
+                <!-- Birth Date -->
+                <p class="card-text">
+                    <strong>Tug‘ilgan sana:</strong>
+                    {% if profile.birth_date %}
+                        {{ profile.birth_date }}
+                    {% else %}
+                        Kiritilmagan
+                    {% endif %}
+                </p>
+                
+                <!-- Edit Profile Button -->
+                <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary mt-3">Profilni Tahrirlash</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

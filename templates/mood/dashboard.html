@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Mental Health Tracker{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4" style="font-family: 'Roboto', sans-serif; font-weight: 700; color: #1e3a8a;">Sizning Kayfiyat va Stress Dashboardingiz</h2>
+
+    <!-- Chart Card -->
+    <div class="card shadow-sm p-4" style="background: #fff; border-radius: 12px; border: none;">
+        <div class="card-body">
+            <canvas id="moodChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Interactive Buttons -->
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <button class="btn btn-custom" onclick="resetChart()">Grafikni Yangilash</button>
+        <button class="btn btn-custom" onclick="toggleStack()">Stackni Yoqish/O‘chirish</button>
+    </div>
+
+    <!-- Chart.js Script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data from Django backend
+        const stressLevels = {{ stress_levels|safe }};
+        const moods = {{ moods|safe }};
+        const sleepQualities = {{ sleep_qualities|safe }};
+        const dates = {{ dates|safe }};
+
+        // Animation settings
+        const totalDuration = 10000;
+        const delayBetweenBars = totalDuration / dates.length;
+        const delayBetweenStacks = 300;
+
+        const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(0) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+
+        const animation = {
+            x: {
+                type: 'number',
+                easing: 'easeInOutQuad',
+                duration: delayBetweenBars,
+                from: NaN,
+                delay(ctx) {
+                    if (ctx.type !== 'data' || ctx.xStarted) return 0;
+                    ctx.xStarted = true;
+                    return ctx.index * delayBetweenBars + ctx.datasetIndex * delayBetweenStacks;
+                }
+            },
+            y: {
+                type: 'number',
+                easing: 'easeInOutQuad',
+                duration: delayBetweenBars + 1000,
+                from: previousY,
+                delay(ctx) {
+                    if (ctx.type !== 'data' || ctx.yStarted) return 0;
+                    ctx.yStarted = true;
+                    return ctx.index * delayBetweenBars + ctx.datasetIndex * delayBetweenStacks;
+                }
+            }
+        };
+
+        // Chart configuration
+        let isStacked = true;
+        const config = {
+            type: 'bar',
+            data: {
+                labels: dates,
+                datasets: [
+                    {
+                        label: 'Stress Darajasi',
+                        data: stressLevels,
+                        backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        barThickness: 20
+                    },
+                    {
+                        label: 'Kayfiyat',
+                        data: moods,
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        barThickness: 20
+                    },
+                    {
+                        label: 'Uyqu Sifati',
+                        data: sleepQualities,
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        barThickness: 20
+                    }
+                ]
+            },
+            options: {
+                animation: animation,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { size: 14, family: 'Poppins' },
+                            color: '#333'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: { size: 14, family: 'Poppins' },
+                        bodyFont: { size: 12, family: 'Poppins' },
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: isStacked,
+                        grid: { display: false },
+                        ticks: { font: { size: 12, family: 'Poppins' }, color: '#555' }
+                    },
+                    y: {
+                        stacked: isStacked,
+                        beginAtZero: true,
+                        max: 15,
+                        grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                        ticks: { font: { size: 12, family: 'Poppins' }, color: '#555' }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        };
+
+        // Initialize chart
+        const ctx = document.getElementById('moodChart').getContext('2d');
+        let moodChart = new Chart(ctx, config);
+
+        // Reset chart function
+        function resetChart() {
+            moodChart.destroy();
+            moodChart = new Chart(ctx, config);
+        }
+
+        // Toggle stacking function
+        function toggleStack() {
+            isStacked = !isStacked;
+            moodChart.options.scales.x.stacked = isStacked;
+            moodChart.options.scales.y.stacked = isStacked;
+            moodChart.update();
+        }
+    </script>
+</div>
+{% endblock %}

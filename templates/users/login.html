@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Kirish - Mental Health Tracker{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4" style="background: #fff; border-radius: 12px; border: none;">
+                <h2 class="text-center mb-4" style="font-family: 'Roboto', sans-serif; font-weight: 700; color: #1e3a8a;">Kirish</h2>
+
+                <!-- Login Form -->
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-custom">Kirish</button>
+                    </div>
+                </form>
+
+                <!-- Registration Link -->
+                <div class="text-center mt-3">
+                    <p style="font-family: 'Poppins', sans-serif; color: #555;">Hisobingiz yo‘qmi?
+                        <a href="{% url 'register' %}" class="text-decoration-none" style="color: #3b82f6; font-weight: 500; transition: color 0.3s ease;">Ro‘yxatdan o‘ting</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Styling for Crispy Forms -->
+<style>
+    .form-group label {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        color: #333;
+    }
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #b2ebf2;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-control:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+    }
+    .helptext {
+        font-size: 0.85rem;
+        color: #777;
+    }
+</style>
+{% endblock %}

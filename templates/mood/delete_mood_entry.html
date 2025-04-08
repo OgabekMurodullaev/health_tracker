@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Kayfiyatni O'chirish - Mental Health Tracker
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Kayfiyatni O'chirish</h2>
+    <div class="card p-4 shadow-sm" style="background: #fff; border-radius: 10px;">
+        <form method="POST">
+            {% csrf_token %}
+            <p>Haqiqatan ham ushbu kayfiyat qaydini o'chirmoqchimisiz?</p>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">O'chirish</button>
+                <a href="{% url 'list-entry' %}" class="btn btn-secondary">Bekor qilish</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

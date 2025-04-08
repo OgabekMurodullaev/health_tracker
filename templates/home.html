@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bosh sahifa - Mental Health Tracker{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5" style="background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); min-height: 50vh; display: flex; align-items: center;">
+    <div class="container text-center">
+        {% if user.is_authenticated %}
+            <h1 class="display-4 animate__animated animate__fadeIn" style="font-family: 'Roboto', sans-serif; font-weight: 700; color: #1e3a8a;">Xush kelibsiz, {{ user.username }}!</h1>
+            <p class="lead mt-3" style="font-family: 'Poppins', sans-serif; color: #333;">Sizning ruhiy holatingizni kuzatib borishda davom eting.</p>
+            <a href="{% url 'dashboard' %}" class="btn btn-custom btn-lg mt-4">Boshqaruv paneliga o‘tish</a>
+        {% else %}
+            <h1 class="display-4 animate__animated animate__fadeIn" style="font-family: 'Roboto', sans-serif; font-weight: 700; color: #1e3a8a;">Mental Health Tracker’ga xush kelibsiz!</h1>
+            <p class="lead mt-3" style="font-family: 'Poppins', sans-serif; color: #333;">Ruhiy holatingizni kuzatib, o‘z sog‘lig‘ingizni yaxshilang.</p>
+            <a href="{% url 'login' %}" class="btn btn-custom btn-lg mt-4">Boshlash uchun Kirish</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Mood Tracking Section -->
+<div class="container mt-5 mb-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2 class="display-5 text-center mb-3" style="font-family: 'Roboto', sans-serif; font-weight: 600; color: #1e3a8a;">Kayfiyatingizni Kuzating</h2>
+            <p class="lead text-center" style="font-family: 'Poppins', sans-serif; color: #555;">Bizning platforma sizning kayfiyatingizni kunlik ravishda kuzatib borishga yordam beradi va sog‘lom hayot sari qadam tashlashda qo‘llab-quvvatlaydi.</p>
+        </div>
+        <div class="col-md-6">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca37f6877d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Mood Tracking" class="img-fluid rounded shadow-sm" style="transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action Section -->
+<div class="container text-center mt-5 mb-5">
+    <h3 class="display-5 mb-4" style="font-family: 'Roboto', sans-serif; font-weight: 600; color: #1e3a8a;">Ruhiy holatingizni yaxshilash uchun biz bilan birga bo‘ling!</h3>
+    <p style="font-family: 'Poppins', sans-serif; color: #555; font-size: 1.1rem;">Bugun ro‘yxatdan o‘ting va o‘zingizni yaxshi his qilish yo‘lida ilk qadamni qo‘ying.</p>
+    {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn btn-custom btn-lg">Ro‘yxatdan o‘tish</a>
+    {% endif %}
+</div>
+
+<!-- Animate.css for Animations -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+        padding: 60px 0;
+    }
+    .btn-custom:hover {
+        background-color: #2563eb;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

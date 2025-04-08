@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Sizning Kayfiyatlaringiz - Mental Health Tracker{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4" style="font-family: 'Roboto', sans-serif; font-weight: 700; color: #1e3a8a;">Sizning Kayfiyatlaringiz</h2>
+
+    <!-- Filter Form -->
+    <div class="card shadow-sm p-4 mb-4" style="background: #fff; border-radius: 12px; border: none;">
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="start_date" class="form-label" style="font-family: 'Poppins', sans-serif; color: #333;">Boshlanish sanasi</label>
+                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+            </div>
+            <div class="col-md-4">
+                <label for="end_date" class="form-label" style="font-family: 'Poppins', sans-serif; color: #333;">Tugash sanasi</label>
+                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
+            </div>
+            <div class="col-md-3">
+                <label for="mood" class="form-label" style="font-family: 'Poppins', sans-serif; color: #333;">Kayfiyat</label>
+                <select name="mood" id="mood" class="form-select">
+                    <option value="">Barchasi</option>
+                    {% for mood_value, mood_label in mood_choices %}
+                        <option value="{{ mood_value }}" {% if request.GET.mood == mood_value %}selected{% endif %}>{{ mood_label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-custom w-100" style="white-space: nowrap; padding: 10px;">Filtrlash</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Grouped Mood Entries -->
+    <div class="accordion" id="moodAccordion">
+        {% for date, entries in grouped_entries.items %}
+        <div class="accordion-item shadow-sm" style="border: none; border-radius: 12px; margin-bottom: 15px;">
+            <h2 class="accordion-header" id="heading-{{ date|date:'Ymd' }}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ date|date:'Ymd' }}" aria-expanded="false" aria-controls="collapse-{{ date|date:'Ymd' }}" style="font-family: 'Roboto', sans-serif; font-weight: 600; color: #1e3a8a; background: #fff; border-radius: 12px;">
+                    {{ date|date:"Y-m-d" }} ({{ entries|length }} ta qayd)
+                </button>
+            </h2>
+            <div id="collapse-{{ date|date:'Ymd' }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ date|date:'Ymd' }}" data-bs-parent="#moodAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for entry in entries %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeIn" style="transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='#fff'">
+                            <span style="font-family: 'Poppins', sans-serif; color: #333;">
+                                <span class="badge bg-primary" style="border-radius: 20px;">{{ entry.mood }}</span> -
+                                Stress: {{ entry.stress_level }}/5 -
+                                Uyqu: {{ entry.sleep_quality }}/5
+                            </span>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'edit-entry' entry.pk %}" class="btn btn-warning btn-sm" style="border-radius: 20px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Tahrirlash</a>
+                                <a href="{% url 'delete-entry' entry.pk %}" class="btn btn-danger btn-sm" style="border-radius: 20px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">O‘chirish</a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="card shadow-sm p-4 text-center" style="background: #fff; border-radius: 12px; border: none;">
+            <p style="font-family: 'Poppins', sans-serif; color: #777;">Sizda hech qanday kayfiyat qaydi yo‘q.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Animate.css for Animations -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<style>
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #b2ebf2;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+    }
+    .accordion-button:not(.collapsed) {
+        background: #e0f7fa !important;
+        color: #1e3a8a !important;
+    }
+</style>
+{% endblock %}
