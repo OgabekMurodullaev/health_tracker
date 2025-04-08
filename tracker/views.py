@@ -9,7 +9,7 @@ from tracker.forms import MoodEntryForm
 from tracker.models import MoodEntry
 
 
-def home(request):
+def home_page(request):
     total_users = User.objects.count()
     return render(request, 'home.html', {'total_users': total_users})
 
