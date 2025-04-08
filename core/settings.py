@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': os.getenv("DATABASE_URL")
+    'default': os.getenv("DATABASE_URL", default='sqlite:///db.sqlite3'),
 }
 
 
